@@ -1,0 +1,75 @@
+-ANALYSIS 
+
+--number of rides total for the year by rider type
+SELECT member_casual, COUNT(ride_id) AS total_rides
+FROM `capstone-072023.bikeshare_data.cleaned_data` 
+GROUP BY member_casual
+ORDER BY total_rides
+
+--number of rides per week by rider type
+SELECT member_casual, day_of_week, COUNT(ride_id) AS rides_by_day_of_week
+FROM `capstone-072023.bikeshare_data.cleaned_data` 
+GROUP BY member_casual, day_of_week
+ORDER BY member_casual, rides_by_day_of_week DESC
+
+--number of rides per month by rider type
+SELECT member_casual, month, COUNT(ride_id) AS rides_by_month
+FROM `capstone-072023.bikeshare_data.cleaned_data` 
+GROUP BY member_casual, month
+ORDER BY member_casual, rides_by_month DESC
+
+--type of bike preferred by rider type 
+SELECT member_casual, rideable_type, COUNT(ride_id) as total_rides
+FROM `capstone-072023.bikeshare_data.cleaned_data` 
+GROUP BY member_casual, rideable_type
+ORDER BY member_casual
+
+--average trip length for all users
+SELECT ROUND(AVG(ride_length_minutes), 2) as average_trip_length
+FROM `capstone-072023.bikeshare_data.cleaned_data` 
+
+--average trip length by rider type
+SELECT member_casual, ROUND(AVG(ride_length_minutes), 2) as average_trip_length
+FROM `capstone-072023.bikeshare_data.cleaned_data` 
+GROUP BY member_casual
+
+--average trip length by day and rider type
+SELECT member_casual, day_of_week, ROUND(AVG(ride_length_minutes), 2) as average_trip_length
+FROM `capstone-072023.bikeshare_data.cleaned_data`
+GROUP BY member_casual, day_of_week
+ORDER BY member_casual, day_of_week
+
+--average trip length by month and rider type
+SELECT member_casual, month, ROUND(AVG(ride_length_minutes), 2) as average_trip_length
+FROM `capstone-072023.bikeshare_data.cleaned_data` 
+GROUP BY member_casual, month
+ORDER BY member_casual, month
+
+--most popular start station by rider type 
+SELECT member_casual, start_station_name, COUNT(start_station_name) as trips_started
+FROM `capstone-072023.bikeshare_data.cleaned_data` 
+GROUP BY member_casual, start_station_name
+ORDER BY trips_started DESC
+LIMIT 10
+
+--most popular end station by rider type 
+SELECT member_casual, end_station_name, COUNT(end_station_name) as trips_ended
+FROM `capstone-072023.bikeshare_data.cleaned_data` 
+GROUP BY member_casual, end_station_name
+ORDER BY trips_ended DESC
+LIMIT 10 
+
+--most popular time of day by rider type
+SELECT member_casual, EXTRACT(hour FROM started_at) as hour_of_day, COUNT(ride_id) as total_rides 
+FROM `capstone-072023.bikeshare_data.cleaned_data` 
+GROUP BY hour_of_day, member_casual
+
+--start lat/lng
+SELECT start_station_name, member_casual, AVG(start_lat) AS start_lat, AVG(start_lng) AS start_lng, COUNT(ride_id) AS total_rides
+FROM `capstone-072023.bikeshare_data.cleaned_data` 
+GROUP BY member_casual, start_station_name 
+
+--end lat/lng
+SELECT end_station_name, member_casual, AVG(end_lat) AS end_lat, AVG(end_lng) AS end_lng, COUNT(ride_id) AS total_rides
+FROM `capstone-072023.bikeshare_data.cleaned_data` 
+GROUP BY member_casual, end_station_name
